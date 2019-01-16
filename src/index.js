@@ -1,6 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+class Name extends React.Component {
+  state = {
+    name: props.firstName + ' ' + props.lastName
+  };
+
+  componentWillReceiveProps(newProps) {
+    // the state is updated when the props change
+    setState({ name: newProps.firstName + ' ' + newProps.lastName });
+  }
+
+  render() {
+    return <span>{this.state.name}</span>;
+  }
+}
+
 const App = props => {
   return <BankAccount />;
 };
@@ -14,6 +29,27 @@ class BankAccount extends React.Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.addAmount !== nextState.addAmount) {
+      return true;
+    }
+    if (this.state.accountBalance !== nextState.accountBalance) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  componentWillMount() {
+      console.log('componentWillMount');
+  }
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+  componentDidUpdate() {
+    console.log('The component updated!');
+  }
+
   increment() {
     this.setState({
       accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
@@ -21,6 +57,7 @@ class BankAccount extends React.Component {
   }
 
   render() {
+    console.log("Rendered!");
     return (
       <div>
         <h3>Account Balance: ${this.state.accountBalance}</h3>
